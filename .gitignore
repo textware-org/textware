@@ -1,0 +1,3 @@
+.env.prod
+composer.lock
+.idea
