@@ -19,8 +19,8 @@ fi
 TEMP_DIR=$(mktemp -d)
 
 # Copy necessary files to the temporary directory
-cp -r src vendor composer.json composer.lock db.sqlite config.php index.php edit.php meta.php login.php logout.php .env "$TEMP_DIR"
-cp *.php "$TEMP_DIR"
+cp -r php/ "$TEMP_DIR"
+#cp php/*.php "$TEMP_DIR"
 
 # Sync the files to the remote server
 rsync -avz -e "ssh -i $SSH_KEY" --delete \
@@ -35,10 +35,10 @@ ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $REMOTE_PATH && composer install --n
 
 # Set correct permissions on the remote server
 ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $REMOTE_PATH && \
-    chmod ug+rwx ../db.sqlite .env && \
+    chmod 644 ../db.sqlite .env && \
     find . -type d -exec chmod 755 {} \; && \
     find . -type f -exec chmod 644 {} \; && \
-    chmod 755 index.php edit.php meta.php login.php logout.php && \
+    chmod 755 *.php && \
     chown -R $FS_USER:$FS_GROUP ."
 
 # Move Sqlite
