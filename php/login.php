@@ -3,7 +3,10 @@
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/src/Auth.php';
 global $DB_PATH;
-#var_dump($DB_PATH);
+global $title;
+global $htmlContent;
+
+$title = 'Logowanie';
 
 session_start();
 
@@ -26,21 +29,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logowanie</title>
+    <?php require_once __DIR__ . '/head.php'; ?>
 </head>
-<body>
-    <h1>Logowanie</h1>
-    <?php if (isset($error)): ?>
-        <p style="color: red;"><?php echo $error; ?></p>
-    <?php endif; ?>
-    <form method="POST">
-        <label for="username">Login:</label>
-        <input type="text" id="username" name="username" required><br>
-        <label for="password">Hasło:</label>
-        <input type="password" id="password" name="password" required><br>
-        <input type="submit" value="Zaloguj">
-    </form>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+<div class="container">
+    <div class="tophead">
+        <h1><?php echo $title; ?></h1>
+    </div>
+    <div class="content">
+        <?php if (isset($error)): ?>
+            <p style="color: red;"><?php echo $error; ?></p>
+        <?php endif; ?>
+    </div>
+    <div class="content">
+        <form method="POST">
+            <div class="form-group">
+                <label for="username">Login:</label>
+                <input type="text" id="username" name="username" required><br>
+                <label for="password">Hasło:</label>
+                <input type="password" id="password" name="password" required><br>
+            </div>
+            <div class="footer menu">
+                <input type="submit" value="Zaloguj">
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

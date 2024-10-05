@@ -18,8 +18,8 @@ class Auth
             $this->db->enableExceptions(true);
         } catch (Exception $e) {
             if ($_ENV['DEBUG'] === 'true') {
-                error_log("src\Database connection failed: " . $e->getMessage());
-                error_log("src\Database path: " . $this->DB_PATH);
+                error_log("Database connection failed: " . $e->getMessage());
+                error_log("Database path: " . $this->DB_PATH);
                 error_log("File permissions: " . substr(sprintf('%o', fileperms($this->DB_PATH)), -4));
                 error_log("Current user: " . exec('whoami'));
                 die("src\Database connection failed: " . $e->getMessage());
@@ -40,20 +40,19 @@ class Auth
         try {
             // Connect to the database
             $db = new SQLite3($this->DB_PATH);
+            // Escape the input to help prevent SQL injection
+            $username = $db->escapeString($username);
+            $hashedPassword = hash('sha256', $password);
 
-            // Prepare the SQL statement
-            $stmt = $db->prepare('SELECT * FROM users WHERE username = :username AND password = :password');
+            $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$hashedPassword'";
 
-            if (!$stmt) {
-                throw new Exception($this->db->lastErrorMsg());
+            $result = $db->query($sql);
+
+            if ($result === false) {
+                // Query failed
+                $error = $db->lastErrorMsg();
+                throw new Exception("Failed to execute query: $error");
             }
-
-            // Bind the values to the placeholders
-            $stmt->bindValue(':username', $username, SQLITE3_TEXT);
-            $stmt->bindValue(':password', hash('sha256', $password), SQLITE3_TEXT);
-
-            // Execute the statement
-            $result = $stmt->execute();
 
             // Fetch the result
             $user = $result->fetchArray(SQLITE3_ASSOC);

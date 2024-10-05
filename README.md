@@ -1,5 +1,6 @@
 ```bash
-./database/init.sh "../../db.sqlite"
+ 
+/var/www/database/init.sh "/var/www/db.sqlite"
 docker compose down
 docker compose build
 docker compose up

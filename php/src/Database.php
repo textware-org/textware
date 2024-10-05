@@ -66,7 +66,7 @@ class Database
     public function getContent()
     {
         try {
-            $result = $this->db->query('SELECT markdown FROM `content` ORDER BY id DESC LIMIT 1');
+            $result = $this->db->query('SELECT markdown FROM content ORDER BY id DESC LIMIT 1');
             if ($result === false) {
                 // Preparation failed
                 $error = $this->db->lastErrorMsg();
@@ -83,7 +83,7 @@ class Database
     public function saveContent($content)
     {
         try {
-            $stmt = $this->db->prepare('INSERT INTO `content` (markdown) VALUES (:content)');
+            $stmt = $this->db->prepare('INSERT INTO content (markdown) VALUES (:content)');
             if ($stmt === false) {
                 // Preparation failed
                 $error = $this->db->lastErrorMsg();
@@ -105,7 +105,7 @@ class Database
     public function getMetadata()
     {
         try {
-            $result = $this->db->query('SELECT title, description FROM `metadata` ORDER BY id DESC LIMIT 1');
+            $result = $this->db->query('SELECT title, description FROM metadata ORDER BY id DESC LIMIT 1');
             $row = $result->fetchArray(SQLITE3_ASSOC);
             return $row ? $row : ['title' => '', 'description' => ''];
         } catch (Exception $e) {
@@ -117,7 +117,7 @@ class Database
     public function saveMetadata($title, $description)
     {
         try {
-            $stmt = $this->db->prepare('INSERT INTO `metadata` (title, description) VALUES (:title, :description)');
+            $stmt = $this->db->prepare('INSERT INTO metadata (title, description) VALUES (:title, :description)');
             if (!$stmt) {
                 throw new Exception($this->db->lastErrorMsg());
             }

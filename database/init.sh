@@ -1,17 +1,17 @@
 #!/bin/bash
-
+CURRENT_PATH=$(dirname "$0")
+echo $CURRENT_PATH
 # Load environment variables
 set -a
 source ../.env.db
 set +a
 
 ((!$#)) && echo No arguments supplied! && exit 1
-
 DB_PATH=$1
 #DB_PATH="../../db.sqlite"
 rm $DB_PATH
 # Create SQLite database
-sqlite3 $DB_PATH < queries/create_tables.sql
+sqlite3 $DB_PATH < "$CURRENT_PATH/queries/create_tables.sql"
 
 # Hash the password
 HASHED_PASSWORD=$(echo -n "$DB_PASSWORD" | sha256sum | awk '{print $1}')

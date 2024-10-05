@@ -1,4 +1,4 @@
-.env.prod
+.env.
 composer.lock
 .idea
 vendor

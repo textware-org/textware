@@ -16,16 +16,16 @@ WORKDIR /var/www/html
 # Set permissions for the entire /var/www/html directory
 RUN chown -R www-data:www-data /var/www/html && \
     chown -R www-data:www-data /var/www/database && \
-    find /var/www/html -type d -exec chmod 755 {} \; && \
-    find /var/www/html -type f -exec chmod 644 {} \;
+    chmod -R 755 /var/www/html
+    #find /var/www/html -type d -exec chmod 755 {} \; && \
+    #find /var/www/html -type f -exec chmod 644 {} \;
 
 # Run the init script
-RUN chmod -R 755 ../database && \
-    ../database/init.sh "../db.sqlite"
-    #&& \
+RUN chmod -R 755 /var/www/database && \
+    /var/www/database/init.sh "/var/www/db.sqlite" &&\
     #mv database/db.sqlite ./db.sqlite && \
-    #chown www-data:www-data ./db.sqlite && \
-    #chmod 666 ./db.sqlite
+    chown www-data:www-data /var/www/db.sqlite && \
+    chmod 666 /var/www/db.sqlite
 
 # Switch to www-data user
 USER www-data

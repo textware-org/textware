@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/src/Database.php';
+
 #global $DB_PATH;
 
 function getDbPath() {
@@ -22,3 +24,10 @@ if (isset($_ENV['DEBUG']) && $_ENV['DEBUG'] === 'true') {
     ini_set('display_startup_errors', 0);
     error_reporting(0);
 }
+
+
+$db = new Database($DB_PATH);
+// Fetch metadata
+$metadata = $db->getMetadata();
+$title = htmlspecialchars($metadata['title']);
+$description = htmlspecialchars($metadata['description']);
