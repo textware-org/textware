@@ -43,13 +43,12 @@ $metadata = $db->getMetadata();
 <div class="tophead">
     <h1><?php echo $title; ?></h1>
 </div>
-<div class="content">
+<div class="info">
     <?php if ($error): ?>
-        <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+        <p><?php echo htmlspecialchars($error); ?></p>
     <?php endif; ?>
 </div>
 <div class="content">
-
     <form method="POST">
         <div class="form-group">
 
@@ -60,7 +59,7 @@ $metadata = $db->getMetadata();
         <div class="form-group">
 
             <label for="description">Opis:</label>
-            <textarea id="description" name="description" rows="4" cols="50"
+            <textarea id="description" name="description" class="form-control" placeholder="Responsive textarea"
                       required><?php echo htmlspecialchars($metadata['description']); ?></textarea><br>
         </div>
         <div class="form-group">
@@ -68,13 +67,8 @@ $metadata = $db->getMetadata();
         </div>
     </form>
 </div>
-<div class="footer menu">
-    <a href="edit.php">Edytuj treść</a> |
-    <a href="meta.php">Edytuj metadane</a> |
-    <a href="index.php">Powrót do podglądu</a>
-</div>
-<div class="footer menu">
-    <a href="logout.php">Wyloguj się</a>
-</div>
+<footer>
+    <?php require_once __DIR__ . '/foot.php'; ?>
+</footer>
 </body>
 </html>

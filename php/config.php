@@ -31,3 +31,9 @@ $db = new Database($DB_PATH);
 $metadata = $db->getMetadata();
 $title = htmlspecialchars($metadata['title']);
 $description = htmlspecialchars($metadata['description']);
+
+$menu_items = [
+    'edit.php' => 'Edytuj treść',
+    'meta.php' => 'Edytuj metadane',
+    'index.php' => 'Podgląd'
+];

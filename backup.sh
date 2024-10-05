@@ -1,7 +1,20 @@
 #!/bin/bash
 CONFIG=".env.prod"
+CURRENT_FILE="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 
-((!$#)) && echo No arguments supplied! && exit 1
+files () {
+  for item in $(ls .env.*)
+  do
+      echo "./$CURRENT_FILE $item"
+  done
+}
+
+((!$#)) && \
+echo No arguments supplied! && \
+echo examples: && \
+files && \
+exit 1
+
 CONFIG=$1
 
 # Load environment variables
@@ -37,7 +50,9 @@ scp -i "$SSH_KEY" "php/.env" "$SSH_USER@$SSH_HOST:$REMOTE_PATH/.env"
 
 
 # Remove the temporary directory
-rm -rf "$TEMP_DIR"
+rm -rf "$TEMP_DIR/src"
+rm -rf "$TEMP_DIR/*.php"
+rm -rf "$TEMP_DIR/vendor"
 
 # Run composer install on the remote server
 ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $REMOTE_PATH && composer install --no-dev --optimize-autoloader"

@@ -32,21 +32,8 @@ $htmlContent = $markdown->parse($content);
         <?php echo $htmlContent; ?>
     </div>
 </div>
-<?php
-// var_dump($_SESSION);
-
-if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-    <div class="footer menu">
-        <a href="edit.php">Edytuj treść</a> |
-        <a href="meta.php">Edytuj metadane</a> |
-    </div>
-    <div class="footer menu">
-        <a href="logout.php">Wyloguj się</a>
-    </div>
-<?php else: ?>
-    <div class="footer menu">
-        <a href="login.php">Zaloguj się</a>
-    </div>
-<?php endif; ?>
+<footer>
+    <?php require_once __DIR__ . '/foot.php'; ?>
+</footer>
 </body>
 </html>

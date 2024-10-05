@@ -31,14 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <?php require_once __DIR__ . '/head.php'; ?>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-gray-100">
+<body class="">
 <div class="container">
     <div class="tophead">
         <h1><?php echo $title; ?></h1>
     </div>
-    <div class="content">
+    <div class="info">
         <?php if (isset($error)): ?>
-            <p style="color: red;"><?php echo $error; ?></p>
+            <div><?php echo $error; ?></div>
         <?php endif; ?>
     </div>
     <div class="content">
@@ -55,5 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </div>
+
+<footer>
+    <?php require_once __DIR__ . '/foot.php'; ?>
+</footer>
+
 </body>
 </html>
