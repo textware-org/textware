@@ -1,13 +1,16 @@
 #!/bin/bash
 CURRENT_PATH=$(dirname "$0")
 echo $CURRENT_PATH
+PATH_ENV="../.env.db"
+PATH_ENV=".env.db"
+DB_PATH="db.sqlite"
 # Load environment variables
 set -a
-source ../.env.db
+source $PATH_ENV
 set +a
 
-((!$#)) && echo No arguments supplied! && exit 1
-DB_PATH=$1
+#((!$#)) && echo !!! No arguments supplied && exit 1
+[ $1 != '' ] && DB_PATH=$1
 #DB_PATH="../../db.sqlite"
 rm $DB_PATH
 # Create SQLite database

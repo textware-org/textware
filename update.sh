@@ -45,16 +45,22 @@ fi
 #    "$TEMP_DIR/" \
 #    "$SSH_USER@$SSH_HOST:$PATH_REMOTE"
 
-scp -i "$SSH_KEY" "$PATH_LOCAL" "$SSH_USER@$SSH_HOST:$PATH_REMOTE"
+# To remove non-hidden files and folders in the current directory
+ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "find . -maxdepth 1 -type d ! -name '.*' -exec rm -rf {} +"
+ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "find . -maxdepth 1 -type f ! -name '.*' -exec rm -f {} +"
+
+# Copy files to the remote server
+#rsync -avz -e "ssh -i $SSH_KEY" --delete \
+#    "$PATH_LOCAL/" \
+#scp -i "$SSH_KEY" "$PATH_LOCAL/" "$SSH_USER@$SSH_HOST:$PATH_REMOTE"
 scp -i "$SSH_KEY" "$PATH_LOCAL/.env" "$SSH_USER@$SSH_HOST:$PATH_REMOTE/.env"
-#scp -i "$SSH_KEY" "db.sqlite" "$SSH_USER@$SSH_HOST:$PATH_REMOTE/../db.sqlite"
+#bash ./database/init.sh
+scp -i "$SSH_KEY" "db.sqlite" "$SSH_USER@$SSH_HOST:$PATH_REMOTE/../db.sqlite"
 
 
 # Remove the temporary directory
 #rm -rf "$TEMP_DIR/src"
-# To remove non-hidden files and folders in the current directory
-ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "find . -maxdepth 1 -type d ! -name '.*' -exec rm -rf {} +"
-ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "find . -maxdepth 1 -type f ! -name '.*' -exec rm -f {} +"
+
 #rm -rf "$TEMP_DIR/*.php"
 
 # Run composer install on the remote server
