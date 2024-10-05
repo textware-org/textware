@@ -27,8 +27,8 @@ else
 fi
 
 # Check if required variables are set
-if [ -z "$SSH_HOST" ] || [ -z "$SSH_USER" ] || [ -z "$SSH_KEY" ] || [ -z "$REMOTE_PATH" ]; then
-    echo "Missing required environment variables. Please check your $CONFIG file."
+if [ -z "$SSH_HOST" ] || [ -z "$SSH_USER" ] || [ -z "$SSH_KEY" ] || [ -z "$PATH_REMOTE" ]; then
+    echo "Missing required environment variables: $SSH_HOST,$SSH_USER,$SSH_KEY,$PATH_REMOTE Please check your $CONFIG file."
     exit 1
 fi
 
@@ -39,3 +39,11 @@ echo "ssh-copy-id -i $SSH_KEY $SSH_USER@$SSH_HOST"
 echo "ssh -i $SSH_KEY $SSH_USER@$SSH_HOST"
 #ssh-copy-id -i "$SSH_KEY" "$SSH_USER@$SSH_HOST"
 #ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST"
+
+# Append the configuration to ~/.ssh/config
+echo -e "\nHost $hostname" >> ~/.ssh/config
+echo "    IdentityFile $private_key" >> ~/.ssh/config
+
+Host softreck.dev
+	IdentityFile ~/.ssh/id_rsa
+	IdentitiesOnly yes

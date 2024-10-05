@@ -14,9 +14,9 @@ class Publisher
         $ssh_host = $_ENV['SSH_HOST'];
         $ssh_user = $_ENV['SSH_USER'];
         $ssh_key = $_ENV['SSH_KEY'];
-        $remote_path = $_ENV['REMOTE_PATH'];
+        $PATH_REMOTE = $_ENV['PATH_REMOTE'];
 
-        $command = "scp -i $ssh_key -r ../public/* $ssh_user@$ssh_host:$remote_path";
+        $command = "scp -i $ssh_key -r ../public/* $ssh_user@$ssh_host:$PATH_REMOTE";
         exec($command, $output, $return_var);
 
         if ($return_var === 0) {

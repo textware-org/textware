@@ -104,6 +104,11 @@ form
     width: 70%;
     max-width: 90%;
 }
+img
+{
+    max-width: 400px;
+    width: 70%;
+}
 input,
 textarea {
     width: 99%;

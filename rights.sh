@@ -30,32 +30,8 @@ if [ -z "$SSH_HOST" ] || [ -z "$SSH_USER" ] || [ -z "$SSH_KEY" ] || [ -z "$PATH_
     echo "Missing required environment variables. Please check your $CONFIG file."
     exit 1
 fi
+[ -z "$PATH_REMOTE" ] && echo "PATH_REMOTE can't be empty" exit 1
 
-# Create a temporary directory for the files to be transferred
-TEMP_DIR=$(mktemp -d)
-
-# Copy necessary files to the temporary directory
-cp -r php/* "$TEMP_DIR"
-#cp .env "$TEMP_DIR"
-#cp db.sqlite "$TEMP_DIR"
-#cp php/*.php "$TEMP_DIR"
-
-# Sync the files to the remote server
-rsync -avz -e "ssh -i $SSH_KEY" --delete \
-    "$TEMP_DIR/" \
-    "$SSH_USER@$SSH_HOST:$PATH_REMOTE"
-
-scp -i "$SSH_KEY" "php/.env" "$SSH_USER@$SSH_HOST:$PATH_REMOTE/.env"
-#scp -i "$SSH_KEY" "db.sqlite" "$SSH_USER@$SSH_HOST:$PATH_REMOTE/../db.sqlite"
-
-
-# Remove the temporary directory
-rm -rf "$TEMP_DIR/src"
-rm -rf "$TEMP_DIR/*.php"
-rm -rf "$TEMP_DIR/vendor"
-
-# Run composer install on the remote server
-ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $PATH_REMOTE && composer install --no-dev --optimize-autoloader"
 
 
 # Set correct permissions on the remote server
@@ -65,11 +41,12 @@ ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $PATH_REMOTE && \
     find . -type f -exec chmod 644 {} \; && \
     chmod 755 *.php"
 
+# Remove the temporary directory
+#rm -rf "$TEMP_DIR/src"
+
+#rm -rf "$TEMP_DIR/*.php"
 ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $PATH_REMOTE && \
     chown -R $FS_USER:$FS_GROUP ."
 
-# Move Sqlite
-#ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "mv $PATH_REMOTE/db.sqlite ../db.sqlite"
-#chmod 644 ../db.sqlite .env && \
-
-echo "Deployment completed successfully!"
+ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $PATH_REMOTE/../ && \
+    chown $FS_USER:$FS_GROUP db.sqlite"

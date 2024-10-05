@@ -26,7 +26,7 @@ else
 fi
 
 # Check if required variables are set
-if [ -z "$SSH_HOST" ] || [ -z "$SSH_USER" ] || [ -z "$SSH_KEY" ] || [ -z "$REMOTE_PATH" ]; then
+if [ -z "$SSH_HOST" ] || [ -z "$SSH_USER" ] || [ -z "$SSH_KEY" ] || [ -z "$PATH_REMOTE" ]; then
     echo "Missing required environment variables. Please check your $CONFIG file."
     exit 1
 fi
@@ -43,10 +43,10 @@ cp -r php/* "$TEMP_DIR"
 # Sync the files to the remote server
 rsync -avz -e "ssh -i $SSH_KEY" --delete \
     "$TEMP_DIR/" \
-    "$SSH_USER@$SSH_HOST:$REMOTE_PATH"
+    "$SSH_USER@$SSH_HOST:$PATH_REMOTE"
 
-scp -i "$SSH_KEY" "php/.env" "$SSH_USER@$SSH_HOST:$REMOTE_PATH/.env"
-#scp -i "$SSH_KEY" "db.sqlite" "$SSH_USER@$SSH_HOST:$REMOTE_PATH/../db.sqlite"
+scp -i "$SSH_KEY" "php/.env" "$SSH_USER@$SSH_HOST:$PATH_REMOTE/.env"
+#scp -i "$SSH_KEY" "db.sqlite" "$SSH_USER@$SSH_HOST:$PATH_REMOTE/../db.sqlite"
 
 
 # Remove the temporary directory
@@ -55,21 +55,21 @@ rm -rf "$TEMP_DIR/*.php"
 rm -rf "$TEMP_DIR/vendor"
 
 # Run composer install on the remote server
-ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $REMOTE_PATH && composer install --no-dev --optimize-autoloader"
+ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $PATH_REMOTE && composer install --no-dev --optimize-autoloader"
 
 
 # Set correct permissions on the remote server
-ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $REMOTE_PATH && \
+ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $PATH_REMOTE && \
     chmod 644 .env && \
     find . -type d -exec chmod 755 {} \; && \
     find . -type f -exec chmod 644 {} \; && \
     chmod 755 *.php"
 
-ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $REMOTE_PATH && \
+ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "cd $PATH_REMOTE && \
     chown -R $FS_USER:$FS_GROUP ."
 
 # Move Sqlite
-#ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "mv $REMOTE_PATH/db.sqlite ../db.sqlite"
+#ssh -i "$SSH_KEY" "$SSH_USER@$SSH_HOST" "mv $PATH_REMOTE/db.sqlite ../db.sqlite"
 #chmod 644 ../db.sqlite .env && \
 
 echo "Deployment completed successfully!"
