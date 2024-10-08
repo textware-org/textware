@@ -8,6 +8,8 @@ body, html {
     /*background-color: #fff; !* White background *!*/
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -44,12 +46,7 @@ body, html {
     z-index: 5;
 }
 
-.content {
-    background-color: #ffffff;
-    width: 100%;
-    /*max-height: 90%;*/
-    height: 70%;
-}
+
 
 .markdown {
     background-color: #ffffff;
@@ -97,23 +94,25 @@ form {
 
 .markdown,
 form
-/*.form-group input,*/
-/*.form-group textarea*/
+    /*.form-group input,*/
+    /*.form-group textarea*/
 {
     min-width: 400px;
     width: 70%;
     max-width: 90%;
 }
-img
-{
+
+img {
     max-width: 400px;
     width: 70%;
 }
+
 input,
 textarea {
     width: 99%;
     /*height: 80%;*/
 }
+
 textarea {
     width: 100%;
     max-width: 100%;
@@ -179,12 +178,12 @@ textarea {
     overflow-y: hidden; /* Ukryj pionowy pasek przewijania */
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-}
 
 .content {
+    background-color: #ffffff;
+    width: 100%;
+    /*max-height: 90%;*/
+    height: 70%;
     flex: 1 0 auto;
 }
 
